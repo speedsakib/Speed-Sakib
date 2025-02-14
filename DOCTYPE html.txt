@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ইনপুট সংরক্ষণ অ্যাপ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #f2f2f2;
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>ইনপুট সংরক্ষণ অ্যাপ</h2>
+    <input type="text" id="userInput" placeholder="আপনার লেখা দিন">
+    <button onclick="saveData()">সংরক্ষণ করুন</button>
+
+    <h3>সংরক্ষিত ডেটা:</h3>
+    <ul id="dataList"></ul>
+
+    <script>
+        // লোকাল স্টোরেজ থেকে ডেটা লোড করা
+        function loadData() {
+            let savedData = localStorage.getItem("savedTexts");
+            if (savedData) {
+                let texts = JSON.parse(savedData);
+                texts.forEach(text => addToList(text));
+            }
+        }
+
+        // ইনপুট থেকে ডেটা নিয়ে লোকাল স্টোরেজে সংরক্ষণ করা
+        function saveData() {
+            let input = document.getElementById("userInput").value;
+            if (input.trim() !== "") {
+                addToList(input);
+                
+                let savedData = localStorage.getItem("savedTexts");
+                let texts = savedData ? JSON.parse(savedData) : [];
+                texts.push(input);
+                
+                localStorage.setItem("savedTexts", JSON.stringify(texts));
+                
+                document.getElementById("userInput").value = ""; // ইনপুট খালি করা
+            }
+        }
+
+        // তালিকায় নতুন ডেটা যোগ করা
+        function addToList(text) {
+            let li = document.createElement("li");
+            li.textContent = text;
+            document.getElementById("dataList").appendChild(li);
+        }
+
+        // পেজ লোড হলে আগের ডেটা দেখানো হবে
+        window.onload = loadData;
+    </script>
+
+</body>
+</html>
